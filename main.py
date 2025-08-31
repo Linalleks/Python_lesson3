@@ -4,8 +4,8 @@ from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
 
+load_dotenv()
 
 letter = """\
 Привет, %friend_name%! %my_name% приглашает тебя на сайт %website%!
@@ -36,19 +36,17 @@ letter = letter.replace('%website%', referral_link, 1)
 letter = letter.replace('%website%', title_website)
 letter = letter.replace('%friend_name%', friend_name)
 letter = letter.replace('%my_name%', sender_name)
-# letter = letter.encode("UTF-8")
 
-msg = MIMEMultipart()
-msg['Subject'] = 'Приглашение!'
-msg['From'] = email_from
-msg['To'] = email_to
-msg['Reply-To'] = email_from
-msg['Return-Path'] = email_from
-msg.attach(MIMEText(letter))
+message = MIMEMultipart()
+message['Subject'] = 'Приглашение!'
+message['From'] = email_from
+message['To'] = email_to
+message['Reply-To'] = email_from
+message['Return-Path'] = email_from
+message.attach(MIMEText(letter))
 
 server = smtplib.SMTP_SSL('smtp.mail.ru', 465)
 server.login(os.environ['LOGIN'], os.environ['PASSWORD'])
-server.sendmail(msg['From'], msg['To'], msg.as_string())
+server.sendmail(message['From'], message['To'], message.as_string())
 server.quit()
 
-print(server)
